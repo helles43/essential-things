@@ -2,7 +2,7 @@
 setlocal enabledelayedexpansion
 
 :: Define the local version of the script (stored within the batch file)
-set "LOCAL_VERSION=2.0"  :: Change this version when you update the script
+set "LOCAL_VERSION=1.0"  :: Change this version when you update the script
 set "URL=https://raw.githubusercontent.com/helles43/essential-things/main/client.bat"
 set "VERSION_URL=https://raw.githubusercontent.com/helles43/essential-things/main/version.txt"
 set "TEMP_FILE=%TEMP%\new_update.bat"
@@ -48,7 +48,7 @@ if exist "!TEMP_FILE!" (
         if exist "!TEMP_FILE!" (
             echo File downloaded successfully.
 
-            :: Delete the old script immediately
+            :: Delete the old script immediately (removes old version info and script)
             del /f /q "!LOCAL_FILE!"
 
             :: Move the new file into place
