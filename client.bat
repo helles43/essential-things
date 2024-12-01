@@ -7,7 +7,6 @@ set "URL=https://raw.githubusercontent.com/helles43/essential-things/main/client
 set "VERSION_URL=https://raw.githubusercontent.com/helles43/essential-things/main/version.txt"
 set "TEMP_FILE=%TEMP%\new_update.bat"
 set "LOCAL_FILE=%~f0"
-set "SPINNER=|/-\"
 
 :: Fetch the latest version from GitHub's version.txt
 echo Checking for updates...
@@ -25,31 +24,26 @@ if exist "!TEMP_FILE!" (
     if !REMOTE_VERSION! gtr !LOCAL_VERSION! (
         echo New version available. Updating...
 
-        :: Show progress while downloading the new script
-        echo Downloading the latest version:
-        
-        set "COUNT=0"
-        :LOOP
-        powershell -Command "Invoke-WebRequest -Uri !URL! -OutFile !TEMP_FILE!" >nul 2>&1
-        if not exist "!TEMP_FILE!" goto LOOP
-        
-        for /L %%i in (0,1,3) do (
-            set /a COUNT+=1
-            set "CHAR=!SPINNER:~%COUNT%,1!"
-            echo|set /p=!CHAR! >nul
-            timeout /nobreak /t 1 >nul
-        )
+        :: Show a progress message while downloading the new batch file
+        powershell -Command ^
+            $url = "!URL!"; ^
+            $output = "!TEMP_FILE!"; ^
+            $progress = New-Object -TypeName System.Management.Automation.ProgressRecord -ArgumentList 1, "Downloading update...", ""; ^
+            $client = New-Object System.Net.WebClient; ^
+            $client.DownloadProgressChanged += { $progress.PercentComplete = $_.ProgressPercentage; Write-Progress $progress }; ^
+            $client.DownloadFileAsync($url, $output); ^
+            while ($client.IsBusy) { Start-Sleep -Seconds 1 }
 
         :: Check if the file was successfully downloaded
         if exist "!TEMP_FILE!" (
             echo File downloaded successfully.
-
+            
             :: Temporarily rename the running script to free up the file name
             ren "!LOCAL_FILE!" "old_script.bat"
-
+            
             :: Move the downloaded file to replace the original batch file
             move /Y "!TEMP_FILE!" "!LOCAL_FILE!"
-
+            
             :: Notify user about successful update
             echo Update complete. The script has been replaced with the latest version.
         ) else (
