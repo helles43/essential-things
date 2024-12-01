@@ -10,11 +10,18 @@ set "LOCAL_FILE=%~f0"
 
 :: Fetch the latest version from GitHub's version.txt
 echo Checking for updates...
-powershell -Command "Invoke-WebRequest -Uri !VERSION_URL! -OutFile !TEMP_FILE!"
+powershell -Command "Invoke-WebRequest -Uri !VERSION_URL! -OutFile !TEMP_FILE!" >nul 2>&1
 
-:: Check if the version file was successfully downloaded
+:: Check if the version file was successfully downloaded and is not empty
 if exist "!TEMP_FILE!" (
-    set /p "REMOTE_VERSION="<"!TEMP_FILE!"
+    for /f "delims=" %%i in (!TEMP_FILE!) do set "REMOTE_VERSION=%%i"
+    if not defined REMOTE_VERSION (
+        echo Error: Version information is empty.
+        del /f /q "!TEMP_FILE!"
+        goto :end
+    )
+
+    :: Delete the temp file after reading
     del /f /q "!TEMP_FILE!"
 
     :: Compare the versions
@@ -35,7 +42,7 @@ if exist "!TEMP_FILE!" (
         echo Downloading the latest version...
         
         :: Download the updated batch file from GitHub
-        powershell -Command "Invoke-WebRequest -Uri !URL! -OutFile !TEMP_FILE!"
+        powershell -Command "Invoke-WebRequest -Uri !URL! -OutFile !TEMP_FILE!" >nul 2>&1
 
         :: Check if the file was successfully downloaded
         if exist "!TEMP_FILE!" (
@@ -63,3 +70,4 @@ if exist "!TEMP_FILE!" (
 echo Welcome
 pause
 
+:end
