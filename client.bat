@@ -21,31 +21,32 @@ if exist "!TEMP_FILE!" (
     echo Current version: !LOCAL_VERSION!
     echo Latest version: !REMOTE_VERSION!
 
-    if !REMOTE_VERSION! gtr !LOCAL_VERSION! (
+    :: Check if the remote version is greater than the local version
+    if "!REMOTE_VERSION!" gtr "!LOCAL_VERSION!" (
+        echo New version available, do you want to upgrade? (Yes/No)
+        
         :askupgrade
-        echo New version available, do you want to upgrade?
         set /p upgrade=Choice: 
-        if %upgrade%==Yes goto :upgrade
-        if %upgrade%==yes goto :upgrade
-        if %upgrade%==No goto :skipupgrade
-        if %upgrade%==no goto :skipupgrade
+        if /I "!upgrade!"=="Yes" goto :upgrade
+        if /I "!upgrade!"=="No" goto :skipupgrade
         goto :askupgrade
 
         :upgrade
-
+        echo Downloading the latest version...
+        
         :: Download the updated batch file from GitHub
         powershell -Command "Invoke-WebRequest -Uri !URL! -OutFile !TEMP_FILE!"
 
         :: Check if the file was successfully downloaded
         if exist "!TEMP_FILE!" (
             echo File downloaded successfully.
-            
+
             :: Temporarily rename the running script to free up the file name
             ren "!LOCAL_FILE!" "old_script.bat"
-            
+
             :: Move the downloaded file to replace the original batch file
             move /Y "!TEMP_FILE!" "!LOCAL_FILE!"
-            
+
             :: Notify user about successful update
             echo Update complete. The script has been replaced with the latest version.
         ) else (
@@ -58,5 +59,7 @@ if exist "!TEMP_FILE!" (
     echo Error: Failed to retrieve version information from GitHub.
 )
 
-echo welcome
+:skipupgrade
+echo Welcome
 pause
+
