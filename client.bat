@@ -29,20 +29,19 @@ if exist "!TEMP_FILE!" (
     echo Current version: !LOCAL_VERSION!
     echo Latest version: !REMOTE_VERSION!
 
-    :: Check if the local version is greater than the remote version first
-    if !LOCAL_VERSION! gtr !REMOTE_VERSION! (
-        echo Your local version is newer than the remote version. Performing update...
-        timeout /t 3 /nobreak > nul
-
-        goto :upgrade
-        )
-    )
-
-    :: If the versions are equal, no action is needed
+    :: If the versions are equal, skip the upgrade process
     if "!LOCAL_VERSION!"=="!REMOTE_VERSION!" (
         echo No update needed. The current version is the latest.
         timeout /t 3 /nobreak > nul
         goto :skipupgrade
+    )
+
+    :: Check if the local version is greater than the remote version first (rollback scenario)
+    if !LOCAL_VERSION! gtr !REMOTE_VERSION! (
+        echo Your local version is newer than the remote version. Performing rollback...
+        timeout /t 3 /nobreak > nul
+
+        goto :upgrade
     )
 
     :: If the remote version is greater than the local version, prompt for upgrade
@@ -54,42 +53,41 @@ if exist "!TEMP_FILE!" (
         if /I "!upgrade!"=="Yes" goto :upgrade
         if /I "!upgrade!"=="No" goto :skipupgrade
         goto :askupgrade
-
-        :upgrade
-        echo Downloading the latest version...
-
-        :: Download the updated batch file from GitHub
-        powershell -Command "Invoke-WebRequest -Uri !URL! -OutFile !TEMP_FILE!" >nul 2>&1
-
-        :: Check if the file was successfully downloaded
-        if exist "!TEMP_FILE!" (
-            echo File downloaded successfully.
-
-            :: Delete the old script immediately (removes old version info and script)
-            del /f /q "!LOCAL_FILE!"
-
-            :: Move the new file into place (new script will be directly replaced)
-            move /Y "!TEMP_FILE!" "!LOCAL_FILE!" >nul
-
-            :: Notify user about successful update
-            echo Update complete. The script has been replaced with the latest version.
-            timeout /t 3 /nobreak > nul
-
-            :: Start the new version of the script
-            start "" "!LOCAL_FILE!"
-
-            :: Exit the current script to prevent it from running again
-            exit
-        ) else (
-            echo Error: Failed to download the new script.
-        )
     )
 ) else (
     echo Error: Failed to retrieve version information from GitHub.
 )
 
+:upgrade
+echo Downloading the latest version...
+
+:: Download the updated batch file from GitHub
+powershell -Command "Invoke-WebRequest -Uri !URL! -OutFile !TEMP_FILE!" >nul 2>&1
+
+:: Check if the file was successfully downloaded
+if exist "!TEMP_FILE!" (
+    echo File downloaded successfully.
+
+    :: Delete the old script immediately (removes old version info and script)
+    del /f /q "!LOCAL_FILE!"
+
+    :: Move the new file into place (new script will be directly replaced)
+    move /Y "!TEMP_FILE!" "!LOCAL_FILE!" >nul
+
+    :: Notify user about successful update
+    echo Update complete. The script has been replaced with the latest version.
+    timeout /t 3 /nobreak > nul
+
+    :: Start the new version of the script
+    start "" "!LOCAL_FILE!"
+
+    :: Exit the current script to prevent it from running again
+    exit
+) else (
+    echo Error: Failed to download the new script.
+)
+
 :skipupgrade
-:: After checking for the update, continue with the rest of the script
 echo Welcome
 pause
 
