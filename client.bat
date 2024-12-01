@@ -2,11 +2,12 @@
 setlocal enabledelayedexpansion
 
 :: Define the local version of the script (stored within the batch file)
-set "LOCAL_VERSION=2.0"  :: Change this version when you update the script
-set "URL=https://raw.githubusercontent.com/helles43/essential-things/main/client.bat"
+set "LOCAL_VERSION=1.0"  :: Change this version when you update the script
+set "URL=https://raw.githubusercontent.com/helles43/essential-things/main/somefile.bat"
 set "VERSION_URL=https://raw.githubusercontent.com/helles43/essential-things/main/version.txt"
 set "TEMP_FILE=%TEMP%\new_update.bat"
 set "LOCAL_FILE=%~f0"
+set "SPINNER=|/-\"
 
 :: Fetch the latest version from GitHub's version.txt
 echo Checking for updates...
@@ -24,19 +25,31 @@ if exist "!TEMP_FILE!" (
     if !REMOTE_VERSION! gtr !LOCAL_VERSION! (
         echo New version available. Updating...
 
-        :: Download the updated batch file from GitHub
-        powershell -Command "Invoke-WebRequest -Uri !URL! -OutFile !TEMP_FILE!"
+        :: Show progress while downloading the new script
+        echo Downloading the latest version:
+        
+        set "COUNT=0"
+        :LOOP
+        powershell -Command "Invoke-WebRequest -Uri !URL! -OutFile !TEMP_FILE!" >nul 2>&1
+        if not exist "!TEMP_FILE!" goto LOOP
+        
+        for /L %%i in (0,1,3) do (
+            set /a COUNT+=1
+            set "CHAR=!SPINNER:~%COUNT%,1!"
+            echo|set /p=!CHAR! >nul
+            timeout /nobreak /t 1 >nul
+        )
 
         :: Check if the file was successfully downloaded
         if exist "!TEMP_FILE!" (
             echo File downloaded successfully.
-            
+
             :: Temporarily rename the running script to free up the file name
             ren "!LOCAL_FILE!" "old_script.bat"
-            
+
             :: Move the downloaded file to replace the original batch file
             move /Y "!TEMP_FILE!" "!LOCAL_FILE!"
-            
+
             :: Notify user about successful update
             echo Update complete. The script has been replaced with the latest version.
         ) else (
