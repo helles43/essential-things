@@ -2,7 +2,7 @@
 setlocal enabledelayedexpansion
 
 :: Define the local version of the script (stored within the batch file)
-set "LOCAL_VERSION=1.0"  :: Change this version when you update the script
+set "LOCAL_VERSION=2.0"  :: Change this version when you update the script
 set "URL=https://raw.githubusercontent.com/helles43/essential-things/main/client.bat"
 set "VERSION_URL=https://raw.githubusercontent.com/helles43/essential-things/main/version.txt"
 set "TEMP_FILE=%TEMP%\new_update.bat"
