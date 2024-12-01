@@ -22,14 +22,10 @@ Basic, Simple
 
 This is an script programmed with Windows Batch Language
 
-----
-
 ## This Script Has Many Advantages Like
 
 * Clearing Windows Temporary Files
 * Many Banner Choices For Customization
-
-----
 
 ## Coming Soon
 
@@ -39,9 +35,8 @@ This is an script programmed with Windows Batch Language
 * Adb For Android Phones Built-in
 * Netstat Commands
 * Startup Scripts
-----
 
-Supported Windows Versions:
+## Supported Windows Versions
 
 * Windows 8 32-Bit (NOT TESTED)
 * Windows 8 64-Bit (NOT TESTED)
@@ -53,8 +48,6 @@ Supported Windows Versions:
 * Windows 11 64-Bit
 
 Download Client.bat file to use!
-
-----
 
 ## Contact
 
