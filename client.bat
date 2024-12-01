@@ -31,26 +31,10 @@ if exist "!TEMP_FILE!" (
 
     :: Check if the local version is greater than the remote version first
     if !LOCAL_VERSION! gtr !REMOTE_VERSION! (
-        echo Your local version is newer than the remote version. Performing rollback...
-
+        echo Your local version is newer than the remote version. Performing update...
         timeout /t 3 /nobreak > nul
 
-        :: Backup the current script (for rollback)
-        copy /Y "!LOCAL_FILE!" "!BACKUP_FILE!" >nul
-
-        :: Restore the backup script (rollback)
-        if exist "!BACKUP_FILE!" (
-            copy /Y "!BACKUP_FILE!" "!LOCAL_FILE!" >nul
-            echo Rollback complete. The previous version has been restored.
-
-            :: Start the rolled-back version of the script
-            start "" "!LOCAL_FILE!"
-
-            :: Exit the script to prevent it from running again
-            exit
-        ) else (
-            echo Error: No backup found for rollback.
-            goto :end
+        goto :upgrade
         )
     )
 
