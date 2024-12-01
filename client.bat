@@ -3,7 +3,7 @@ setlocal enabledelayedexpansion
 
 :: Define the local version of the script (stored within the batch file)
 set "LOCAL_VERSION=1.0"  :: Change this version when you update the script
-set "URL=https://raw.githubusercontent.com/helles43/essential-things/main/client.bat"
+set "URL=https://raw.githubusercontent.com/helles43/essential-things/main/somefile.bat"
 set "VERSION_URL=https://raw.githubusercontent.com/helles43/essential-things/main/version.txt"
 set "TEMP_FILE=%TEMP%\new_update.bat"
 set "LOCAL_FILE=%~f0"
@@ -24,15 +24,8 @@ if exist "!TEMP_FILE!" (
     if !REMOTE_VERSION! gtr !LOCAL_VERSION! (
         echo New version available. Updating...
 
-        :: Show a progress message while downloading the new batch file
-        powershell -Command ^
-            $url = "!URL!"; ^
-            $output = "!TEMP_FILE!"; ^
-            $progress = New-Object -TypeName System.Management.Automation.ProgressRecord -ArgumentList 1, "Downloading update...", ""; ^
-            $client = New-Object System.Net.WebClient; ^
-            $client.DownloadProgressChanged += { $progress.PercentComplete = $_.ProgressPercentage; Write-Progress $progress }; ^
-            $client.DownloadFileAsync($url, $output); ^
-            while ($client.IsBusy) { Start-Sleep -Seconds 1 }
+        :: Download the updated batch file from GitHub
+        powershell -Command "Invoke-WebRequest -Uri !URL! -OutFile !TEMP_FILE!"
 
         :: Check if the file was successfully downloaded
         if exist "!TEMP_FILE!" (
