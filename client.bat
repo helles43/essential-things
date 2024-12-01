@@ -5,7 +5,7 @@ title Essential-Things
 cls
 
 :: Define the hardcoded local version of the script
-set "LOCAL_VERSION=2"  :: Change this version when you update the script
+set "LOCAL_VERSION=14"  :: Change this version when you update the script
 set "URL=https://raw.githubusercontent.com/helles43/essential-things/main/client.bat"
 set "VERSION_URL=https://raw.githubusercontent.com/helles43/essential-things/main/version.txt"
 set "TEMP_FILE=%TEMP%\new_update.bat"
@@ -97,18 +97,71 @@ if exist "!TEMP_FILE!" (
 )
 
 :skipupgrade
+:reloadbanner
 chcp 65001
 cls
-set banner=doom
-cd banner/fonts/
+set /p banner=<settings/startupconfigs/bannerconfig.esetting
+cd banner/fonts
 type %banner%.ebanner
+cd..
+cd..
 echo Essential-Things Command Line, Type "help" to display commands...
 
-:: Prompt user for a command, corrected incomplete line
-set /p askcommand=Type your command: 
+:commandline
+set /p askcommand=[%COMPUTERNAME%]~ 
+if %askcommand%==help goto :help
+if %askcommand%==changebanner goto :changebanner
+if %askcommand%==cleartemp goto :cleartemp
+if %askcommand%==clearscreen goto :reloadbanner
+if %askcommand%==repair goto :update
+goto :commandline
 
-:: Process user command (you can add your logic here)
-if "%askcommand%"=="" echo You didn't enter a command.
+:changebanner
+echo.
+echo =[Banners]==================================================================1/1=
+echo doom.ebanner
+echo orge.ebanner
+echo small.ebanner
+echo tmplr.ebanner
+echo.
+echo [!]: Only official banners are being displayed, to use custom one enter its name
+echo.
+set /p bannerselect=[changebanner]:type name of an banner~ 
+cd settings/startupconfigs
+delete bannerconfig.ebanner
+echo %bannerselect%>>bannerconfig.esetting
+cd..
+cd..
+goto :reloadbanner
+
+:help
+echo.
+echo =[Help]=============================================1/1=
+echo changebanner - Changes banner
+echo update       - Manually updates client
+echo repair       - Repairs client (Online)
+echo cleartemp    - Clears temporary folders on this computer
+echo clearscreen  - Clears all commands history on screen
+echo.
+goto :commandline
+
+:cleartemp
+echo.
+echo cleartemp V0.1
+ECHO Deleting User temp files ...
+DEL /S /Q /F "%TEMP%\*.*"
+DEL /S /Q /F "%TMP%\*.*"
+
+ECHO Deleting Local temp files
+DEL /S /Q /F "%USERPROFILE%\Local Settings\Temp\*.*"
+DEL /S /Q /F "%LOCALAPPDATA%\Temp\*.*"
+
+ECHO Deleting Windows temp files
+DEL /S /Q /F "%WINDIR%\temp\*.*"
+FOR /D %%p IN ("%WINDIR%\Temp\*") DO RMDIR /S /Q "%%p"
+ECHO Cleanup completed !!!
+echo.
+goto :commandline
 
 :end
 exit /b
