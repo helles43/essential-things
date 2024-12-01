@@ -33,6 +33,8 @@ if exist "!TEMP_FILE!" (
     set "REMOTE_VERSION_NO_DOTS=!REMOTE_VERSION:.=!"
 
     echo Comparing version numbers...
+    
+    :: Compare the versions as numbers
     if !REMOTE_VERSION_NO_DOTS! gtr !LOCAL_VERSION_NO_DOTS! (
         echo A new version is available. Do you want to upgrade? (Yes/No)
         
