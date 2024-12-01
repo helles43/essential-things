@@ -48,10 +48,10 @@ if exist "!TEMP_FILE!" (
         if exist "!TEMP_FILE!" (
             echo File downloaded successfully.
 
-            :: Temporarily rename the running script to free up the file name
-            ren "!LOCAL_FILE!" "old_script.bat"
+            :: Delete the old script immediately
+            del /f /q "!LOCAL_FILE!"
 
-            :: Ensure the new file is moved correctly
+            :: Move the new file into place
             move /Y "!TEMP_FILE!" "!LOCAL_FILE!" >nul
 
             :: Notify user about successful update
@@ -60,7 +60,7 @@ if exist "!TEMP_FILE!" (
             :: Start the new version of the script
             start "" "!LOCAL_FILE!"
 
-            :: Exit the old script to ensure it doesn't continue running
+            :: Exit the current script to prevent it from running
             exit
         ) else (
             echo Error: Failed to download the new script.
