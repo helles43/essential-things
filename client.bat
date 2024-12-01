@@ -28,8 +28,12 @@ if exist "!TEMP_FILE!" (
     echo Current version: !LOCAL_VERSION!
     echo Latest version: !REMOTE_VERSION!
 
-    :: Compare the versions
-    if "!REMOTE_VERSION!" gtr "!LOCAL_VERSION!" (
+    :: Remove dots from the versions for comparison
+    set "LOCAL_VERSION_NO_DOTS=!LOCAL_VERSION:.=!"
+    set "REMOTE_VERSION_NO_DOTS=!REMOTE_VERSION:.=!"
+
+    echo Comparing version numbers...
+    if !REMOTE_VERSION_NO_DOTS! gtr !LOCAL_VERSION_NO_DOTS! (
         echo A new version is available. Do you want to upgrade? (Yes/No)
         
         :askupgrade
@@ -77,3 +81,4 @@ echo Welcome
 pause
 
 :end
+exit /b
