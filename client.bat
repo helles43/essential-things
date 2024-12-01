@@ -56,6 +56,9 @@ if exist "!TEMP_FILE!" (
 
             :: Notify user about successful update
             echo Update complete. The script has been replaced with the latest version.
+
+            :: Exit the script after update to ensure it doesn't continue running with the old version
+            exit
         ) else (
             echo Error: Failed to download the new script.
         )
