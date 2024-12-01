@@ -1,7 +1,6 @@
 @echo off
 setlocal enabledelayedexpansion
 cd /d "%~dp0"
-chcp 65001
 title Essential-Things
 cls
 
@@ -36,6 +35,9 @@ if exist "!TEMP_FILE!" (
     :: Check if the local version is greater than the remote version first
     if !LOCAL_VERSION! gtr !REMOTE_VERSION! (
         echo Your local version is newer than the remote version. Performing update...
+        powershell -c [console]::beep(1000,200)
+        powershell -c [console]::beep(1000,200)
+        powershell -c [console]::beep(1000,200)
         timeout /t 3 /nobreak > nul
         goto :upgrade
     )
@@ -43,6 +45,7 @@ if exist "!TEMP_FILE!" (
     :: If the versions are equal, no action is needed
     if "!LOCAL_VERSION!"=="!REMOTE_VERSION!" (
         echo No update needed. The current version is the latest.
+        powershell -c [console]::beep(1000,200)
         timeout /t 3 /nobreak > nul
         goto :skipupgrade
     )
@@ -50,6 +53,8 @@ if exist "!TEMP_FILE!" (
     :: If the remote version is greater than the local version, prompt for upgrade
     if !REMOTE_VERSION! gtr !LOCAL_VERSION! (
         echo A new version is available. Do you want to upgrade? (Yes/No)
+        powershell -c [console]::beep(1000,200)
+        powershell -c [console]::beep(1500,200)
         
         :askupgrade
         set /p upgrade=Choice: 
@@ -93,12 +98,14 @@ if exist "!TEMP_FILE!" (
 )
 
 :skipupgrade
-:: After checking for the update, continue with the rest of the script
+chcp 65001
 cls
 set banner=doom
 cd banner/fonts/
 type %banner%.ebanner
-pause
+echo Essential-Things Command Line, Type "help" to display commands...
+set /p askcommand=%userprofile% ***
+if %askcommand%==
 
 :end
 exit /b
