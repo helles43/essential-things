@@ -96,6 +96,25 @@ if exist "!TEMP_FILE!" (
 
 :upgrade
 echo Downloading the latest version...
+rmdir settings
+mkdir settings
+cd settings
+mkdir startupconfigs
+cd startupconfigs
+echo small>>bannerconfig.esetting
+cd..
+cd..
+
+rmdir themes
+mkdir themes
+cd themes
+mkdir banners
+cd banners
+
+Powershell Invoke-WebRequest -Uri "https://raw.githubusercontent.com/helles43/essential-things/refs/heads/main/tmplr.ebanner" -OutFile ".\tmplr.ebanner"
+Powershell Invoke-WebRequest -Uri "https://raw.githubusercontent.com/helles43/essential-things/refs/heads/main/orge.ebanner" -OutFile ".\orge.ebanner"
+Powershell Invoke-WebRequest -Uri "https://raw.githubusercontent.com/helles43/essential-things/refs/heads/main/doom.ebanner" -OutFile ".\doom.ebanner"
+Powershell Invoke-WebRequest -Uri "https://raw.githubusercontent.com/helles43/essential-things/refs/heads/main/small.ebanner" -OutFile ".\small.ebanner"
 
 :: Download the updated batch file from GitHub
 powershell -Command "Invoke-WebRequest -Uri !URL! -OutFile !TEMP_FILE!" >nul 2>&1
@@ -128,7 +147,7 @@ if exist "!TEMP_FILE!" (
 chcp 65001
 cls
 set /p banner=<settings/startupconfigs/bannerconfig.esetting
-cd banner/fonts
+cd themes/banners
 type %banner%.ebanner
 cd..
 cd..
