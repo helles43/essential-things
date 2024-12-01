@@ -1,8 +1,8 @@
 @echo off
 setlocal enabledelayedexpansion
 
-:: Define the hardcoded local version of the script
-set "LOCAL_VERSION=2.0"  :: Change this version when you update the script
+:: Define the hardcoded local version of the script as an integer (e.g., 10 instead of 1.0)
+set "LOCAL_VERSION=2"  :: Change this version when you update the script (as an integer without dot)
 set "URL=https://raw.githubusercontent.com/helles43/essential-things/main/client.bat"
 set "VERSION_URL=https://raw.githubusercontent.com/helles43/essential-things/main/version.txt"
 set "TEMP_FILE=%TEMP%\new_update.bat"
@@ -28,14 +28,10 @@ if exist "!TEMP_FILE!" (
     echo Current version: !LOCAL_VERSION!
     echo Latest version: !REMOTE_VERSION!
 
-    :: Remove dots from the versions for comparison
-    set "LOCAL_VERSION_NO_DOTS=!LOCAL_VERSION:.=!"
-    set "REMOTE_VERSION_NO_DOTS=!REMOTE_VERSION:.=!"
-
     echo Comparing version numbers...
-    
-    :: Compare the versions as numbers
-    if !REMOTE_VERSION_NO_DOTS! gtr !LOCAL_VERSION_NO_DOTS! (
+
+    :: Compare the versions as numbers (as integers without dots)
+    if !REMOTE_VERSION! gtr !LOCAL_VERSION! (
         echo A new version is available. Do you want to upgrade? (Yes/No)
         
         :askupgrade
