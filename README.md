@@ -24,14 +24,14 @@ This is an script programmed with Windows Batch Language
 
 ----
 
-This Script Has Many Advantages Like:
+## This Script Has Many Advantages Like
 
 * Clearing Windows Temporary Files
 * Many Banner Choices For Customization
 
 ----
 
-Coming Soon:
+## Coming Soon
 
 * Encoding an Decoding Texts
 * Theme Colors
@@ -43,16 +43,19 @@ Coming Soon:
 
 Supported Windows Versions:
 
-*Windows 8 32-Bit (NOT TESTED)
-*Windows 8 64-Bit (NOT TESTED)
-*Windows 8.1 32-Bit (NOT TESTED)
-*Windows 8.1 64-Bit (NOT TESTED)
-*Windows 10 32-Bit
-*Windows 10 64-Bit
-*Windows 11 32-Bit
-*Windows 11 64-Bit
+* Windows 8 32-Bit (NOT TESTED)
+* Windows 8 64-Bit (NOT TESTED)
+* Windows 8.1 32-Bit (NOT TESTED)
+* Windows 8.1 64-Bit (NOT TESTED)
+* Windows 10 32-Bit
+* Windows 10 64-Bit
+* Windows 11 32-Bit
+* Windows 11 64-Bit
 
 Download Client.bat file to use!
+
+----
+
 ## Contact
 
 Ege Taha Öğe / helles43 - egetaha20113@gmail.com
