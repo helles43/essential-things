@@ -24,7 +24,7 @@ if exist "!TEMP_FILE!" (
     if !REMOTE_VERSION! gtr !LOCAL_VERSION! (
         :askupgrade
         echo New version available, do you want to upgrade?
-        set /p upgrade= Yes/No? 
+        set /p upgrade=Choice: 
         if %upgrade%==Yes goto :upgrade
         if %upgrade%==yes goto :upgrade
         if %upgrade%==No goto :skipupgrade
