@@ -1,8 +1,8 @@
 
 <br/>
 <div align="center">
-<a href="https://github.com/ShaanCoding/ReadME-Generator">
-<img src="https://picsum.photos/400" alt="Logo" width="80" height="80">
+<a href="https://raw.githubusercontent.com/helles43/essential-things">
+<img src="https://raw.githubusercontent.com/helles43/essential-things/refs/heads/main/readmelogo.png" alt="Logo" width="80" height="80">
 </a>
 <h3 align="center">Essential-Things</h3>
 <p align="center">
@@ -18,7 +18,7 @@ Basic, Simple
 
 ## About The Project
 
-![Product Screenshot](https://picsum.photos/1920/1080)
+![Product Screenshot](https://raw.githubusercontent.com/helles43/essential-things/refs/heads/main/readmebanner.png)
 
 This is an script programmed with Windows Batch Language
 
