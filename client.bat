@@ -1,7 +1,9 @@
 @echo off
 setlocal enabledelayedexpansion
 cd /d "%~dp0"
+chcp 65001
 title Essential-Things
+cls
 
 :: Define the hardcoded local version of the script
 set "LOCAL_VERSION=2"  :: Change this version when you update the script
@@ -92,7 +94,10 @@ if exist "!TEMP_FILE!" (
 
 :skipupgrade
 :: After checking for the update, continue with the rest of the script
-echo Welcome
+cls
+set banner=doom
+cd banner/fonts/
+type %banner%.ebanner
 pause
 
 :end
