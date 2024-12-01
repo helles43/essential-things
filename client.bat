@@ -1,5 +1,7 @@
 @echo off
 setlocal enabledelayedexpansion
+cd /d "%~dp0"
+
 
 :: Define the hardcoded local version of the script
 set "LOCAL_VERSION=2"  :: Change this version when you update the script
