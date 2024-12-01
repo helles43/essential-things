@@ -51,8 +51,8 @@ if exist "!TEMP_FILE!" (
             :: Temporarily rename the running script to free up the file name
             ren "!LOCAL_FILE!" "old_script.bat"
 
-            :: Move the downloaded file to replace the original batch file
-            move /Y "!TEMP_FILE!" "!LOCAL_FILE!"
+            :: Ensure the new file is moved correctly
+            move /Y "!TEMP_FILE!" "!LOCAL_FILE!" >nul
 
             :: Notify user about successful update
             echo Update complete. The script has been replaced with the latest version.
