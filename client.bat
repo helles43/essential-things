@@ -7,6 +7,7 @@ set "URL=https://raw.githubusercontent.com/helles43/essential-things/main/client
 set "VERSION_URL=https://raw.githubusercontent.com/helles43/essential-things/main/version.txt"
 set "TEMP_FILE=%TEMP%\new_update.bat"
 set "LOCAL_FILE=%~f0"
+set "BACKUP_FILE=%TEMP%\backup_client.bat"  :: Backup file for rollback
 
 :: Fetch the latest version from GitHub's version.txt
 echo Checking for updates...
@@ -28,7 +29,36 @@ if exist "!TEMP_FILE!" (
     echo Current version: !LOCAL_VERSION!
     echo Latest version: !REMOTE_VERSION!
 
-    :: Compare the versions (as numbers, not with dots)
+    :: Check if the local version is greater than the remote version first
+    if !LOCAL_VERSION! gtr !REMOTE_VERSION! (
+        echo Your local version is newer than the remote version. Performing rollback...
+
+        :: Backup the current script (for rollback)
+        copy /Y "!LOCAL_FILE!" "!BACKUP_FILE!" >nul
+
+        :: Restore the backup script (rollback)
+        if exist "!BACKUP_FILE!" (
+            copy /Y "!BACKUP_FILE!" "!LOCAL_FILE!" >nul
+            echo Rollback complete. The previous version has been restored.
+
+            :: Start the rolled-back version of the script
+            start "" "!LOCAL_FILE!"
+
+            :: Exit the script to prevent it from running again
+            exit
+        ) else (
+            echo Error: No backup found for rollback.
+            goto :end
+        )
+    )
+
+    :: If the versions are equal, no action is needed
+    if "!LOCAL_VERSION!"=="!REMOTE_VERSION!" (
+        echo No update needed. The current version is the latest.
+        goto :skipupgrade
+    )
+
+    :: If the remote version is greater than the local version, prompt for upgrade
     if !REMOTE_VERSION! gtr !LOCAL_VERSION! (
         echo A new version is available. Do you want to upgrade? (Yes/No)
         
@@ -65,14 +95,13 @@ if exist "!TEMP_FILE!" (
         ) else (
             echo Error: Failed to download the new script.
         )
-    ) else (
-        echo No update needed. The current version is the latest.
     )
 ) else (
     echo Error: Failed to retrieve version information from GitHub.
 )
 
 :skipupgrade
+:: After checking for the update, continue with the rest of the script
 echo Welcome
 pause
 
