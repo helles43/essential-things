@@ -30,7 +30,7 @@ if exist "!TEMP_FILE!" (
 
     echo Comparing version numbers...
 
-    :: Compare the versions as numbers (as integers without dots)
+    :: Only show upgrade prompt if the remote version is greater than the local version
     if !REMOTE_VERSION! gtr !LOCAL_VERSION! (
         echo A new version is available. Do you want to upgrade? (Yes/No)
         
@@ -68,7 +68,11 @@ if exist "!TEMP_FILE!" (
             echo Error: Failed to download the new script.
         )
     ) else (
-        echo No update needed. The current version is the latest.
+        if !REMOTE_VERSION! equ !LOCAL_VERSION! (
+            echo You already have the latest version. No update needed.
+        ) else (
+            echo No update needed. The current version is the latest.
+        )
     )
 ) else (
     echo Error: Failed to retrieve version information from GitHub.
