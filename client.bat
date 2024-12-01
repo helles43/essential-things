@@ -31,19 +31,18 @@ if exist "!TEMP_FILE!" (
     echo Current version: !LOCAL_VERSION!
     echo Latest version: !REMOTE_VERSION!
 
-    :: If the versions are equal, skip the upgrade process
+    :: Check if the local version is greater than the remote version first
+    if !LOCAL_VERSION! gtr !REMOTE_VERSION! (
+        echo Your local version is newer than the remote version. Performing update...
+        timeout /t 3 /nobreak > nul
+        goto :upgrade
+    )
+
+    :: If the versions are equal, no action is needed
     if "!LOCAL_VERSION!"=="!REMOTE_VERSION!" (
         echo No update needed. The current version is the latest.
         timeout /t 3 /nobreak > nul
         goto :skipupgrade
-    )
-
-    :: Check if the local version is greater than the remote version first (rollback scenario)
-    if !LOCAL_VERSION! gtr !REMOTE_VERSION! (
-        echo Your local version is newer than the remote version. Performing rollback...
-        timeout /t 3 /nobreak > nul
-
-        goto :upgrade
     )
 
     :: If the remote version is greater than the local version, prompt for upgrade
@@ -55,9 +54,11 @@ if exist "!TEMP_FILE!" (
         if /I "!upgrade!"=="Yes" goto :upgrade
         if /I "!upgrade!"=="No" goto :skipupgrade
         goto :askupgrade
+
     )
 ) else (
     echo Error: Failed to retrieve version information from GitHub.
+    goto :end
 )
 
 :upgrade
@@ -90,6 +91,7 @@ if exist "!TEMP_FILE!" (
 )
 
 :skipupgrade
+:: After checking for the update, continue with the rest of the script
 echo Welcome
 pause
 
