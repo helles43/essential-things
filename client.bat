@@ -3,7 +3,7 @@ setlocal enabledelayedexpansion
 
 :: Define the local version of the script (stored within the batch file)
 set "LOCAL_VERSION=1.0"  :: Change this version when you update the script
-set "URL=https://raw.githubusercontent.com/helles43/essential-things/main/somefile.bat"
+set "URL=https://raw.githubusercontent.com/helles43/essential-things/main/client.bat"
 set "VERSION_URL=https://raw.githubusercontent.com/helles43/essential-things/main/version.txt"
 set "TEMP_FILE=%TEMP%\new_update.bat"
 set "LOCAL_FILE=%~f0"
@@ -22,7 +22,15 @@ if exist "!TEMP_FILE!" (
     echo Latest version: !REMOTE_VERSION!
 
     if !REMOTE_VERSION! gtr !LOCAL_VERSION! (
-        echo New version available. Updating...
+        echo New version available, do you want to upgrade?
+        set /p upgrade= Yes/No? 
+        if %upgrade%==Yes goto :upgrade
+        if %upgrade%==yes goto :upgrade
+        if %upgrade%==No goto :skipupgrade
+        if %upgrade%==no goto :skipupgrade
+        goto :askupgrade
+
+        :upgrade
 
         :: Download the updated batch file from GitHub
         powershell -Command "Invoke-WebRequest -Uri !URL! -OutFile !TEMP_FILE!"
