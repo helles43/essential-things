@@ -33,6 +33,8 @@ if exist "!TEMP_FILE!" (
     if !LOCAL_VERSION! gtr !REMOTE_VERSION! (
         echo Your local version is newer than the remote version. Performing rollback...
 
+        timeout /t 3 /nobreak > nul
+
         :: Backup the current script (for rollback)
         copy /Y "!LOCAL_FILE!" "!BACKUP_FILE!" >nul
 
@@ -55,6 +57,7 @@ if exist "!TEMP_FILE!" (
     :: If the versions are equal, no action is needed
     if "!LOCAL_VERSION!"=="!REMOTE_VERSION!" (
         echo No update needed. The current version is the latest.
+        timeout /t 3 /nobreak > nul
         goto :skipupgrade
     )
 
@@ -86,6 +89,7 @@ if exist "!TEMP_FILE!" (
 
             :: Notify user about successful update
             echo Update complete. The script has been replaced with the latest version.
+            timeout /t 3 /nobreak > nul
 
             :: Start the new version of the script
             start "" "!LOCAL_FILE!"
