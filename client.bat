@@ -12,7 +12,7 @@ REM  --> Check for permissions
 )
 
 REM --> If error flag set, we do not have admin.
-if '%errorlevel%' NEQ '0' (e
+if '%errorlevel%' NEQ '0' (
     echo This software needs administrative priviles to run certain apps and to confirm your software is legit and not knockoff...
     echo Requesting administrative privileges...
     goto UACPrompt
