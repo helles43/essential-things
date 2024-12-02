@@ -51,6 +51,7 @@ Download Client.bat file to use!
 
 ## Contact
 
-Ege Taha Öğe / helles43 - egetaha20113@gmail.com
+Ege Taha Öğe / helles43
+egetaha20113@gmail.com
 
 Project Link: https://github.com/helles43/essential-things
